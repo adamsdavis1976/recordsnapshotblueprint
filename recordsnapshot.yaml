@@ -45,13 +45,6 @@ blueprint:
       selector:
         device:
           integration: mobile_app
-    
-    is_ios:
-      name: Is it an iOS device?
-      description: Toggle if your selected device runs iOS, default is Android
-      selector:
-        boolean:
-      default: false
    
     notification_title:
       name: Notification title (Optional)
@@ -71,7 +64,7 @@ blueprint:
       default: []
       selector:
         action:
-#  source_url: https://community.home-assistant.io/t/camera-snapshot-and-additional-actions-when-binary-sensor-is-triggered/255382
+source_url: https://github.com/adamsdavis1976/recordsnapshotblueprint/blob/master/recordsnapshot.yaml
 mode: restart
 variables:
   binary_sensor: !input 'binary_sensor'
@@ -96,8 +89,6 @@ variables:
   notification_title: !input notification_title
   notification_message: !input notification_message
  
-
-
 trigger:
   platform: state
   entity_id: !input 'binary_sensor'
@@ -131,5 +122,3 @@ action:
     data:
       image: "{{ snapshot_file_path }}"
       clickAction: "{{ recording_file_path }}"
-    
- 
