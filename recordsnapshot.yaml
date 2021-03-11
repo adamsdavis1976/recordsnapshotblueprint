@@ -16,6 +16,13 @@ blueprint:
       selector:
         entity:
           domain: camera
+    alarm_panel_entity:
+      name: '(OPTIONAL) Alarm panel entity'
+      description: If this entity state is 'armed_away', it will prevent the automation from running. E.g. somebody is home (binary_sensor.people_home).
+      default:
+      selector:
+        entity:
+          domain: alarm_control_panel
     delay:
       name: 'Snapshot Delay (Optional)'
       description: 'Wait before creating camera snapshot'
@@ -88,13 +95,27 @@ variables:
   is_ios: !input is_ios
   notification_title: !input notification_title
   notification_message: !input notification_message
+
+  alarm_panel_entity: !input alarm_panel_entity
  
 trigger:
   platform: state
   entity_id: !input 'binary_sensor'
   from: 'off'
   to: 'on'
+condition:
+  - condition: template
+    value_template: >
+      {{ (alarm_panel_entity == none) or (states[alarm_panel_entity].state == 'armed_away') }}
+
 action: 
+
+  - entity_id: !input 'binary_sensor'
+    service:  >
+      {% if (alarm_panel_entity != none) %}
+        alarm_control_panel.alarm_trigger
+      {% endif %}
+
   - service: camera.record
     entity_id: !input 'camera'
     data:
