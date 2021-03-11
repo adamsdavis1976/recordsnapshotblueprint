@@ -92,7 +92,6 @@ variables:
   recording_latest_create_file_path: '{{ latest_location }}/recording_{{ states[camera].object_id }}_latest.mp4'
   
   notify_device: !input notify_device
-  is_ios: !input is_ios
   notification_title: !input notification_title
   notification_message: !input notification_message
 
