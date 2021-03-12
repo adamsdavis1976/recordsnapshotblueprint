@@ -71,7 +71,7 @@ blueprint:
       default: []
       selector:
         action:
-source_url: https://github.com/adamsdavis1976/recordsnapshotblueprint/blob/master/recordsnapshot.yaml
+#source_url: https://github.com/adamsdavis1976/recordsnapshotblueprint/blob/master/recordsnapshot.yaml
 mode: restart
 variables:
   binary_sensor: !input 'binary_sensor'
@@ -103,18 +103,18 @@ trigger:
   from: 'off'
   to: 'on'
   
-#condition:
-#  - condition: template
-#    value_template: >
-#      {{ (alarm_panel_entity == none) or (states[alarm_panel_entity].state == 'armed_away') }}
+condition:
+  - condition: template
+    value_template: >
+      {{ (alarm_panel_entity == none) or (states[alarm_panel_entity].state == 'armed_away') }}
       
 action: 
 
-#  - entity_id: !input 'binary_sensor'
-#    service:  >
-#      {% if (alarm_panel_entity != none) %}
-#        alarm_control_panel.alarm_trigger
-#      {% endif %}
+  - entity_id: !input 'binary_sensor'
+    service:  >
+      {% if (alarm_panel_entity != none) %}
+        alarm_control_panel.alarm_trigger
+      {% endif %}
 
   - service: camera.record
     entity_id: !input 'camera'
