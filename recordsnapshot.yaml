@@ -17,8 +17,8 @@ blueprint:
         entity:
           domain: camera
     alarm_panel_entity:
-      name: '(OPTIONAL) Alarm panel entity'
-      description: If this entity state is 'armed_away', it will prevent the automation from running. E.g. somebody is home (binary_sensor.people_home).
+      name: 'Alarm panel (Optional)'
+      description: If Alarm is selected and its state its state is NOT 'armed_away', it will block this automation from running.
       default:
       selector:
         entity:
