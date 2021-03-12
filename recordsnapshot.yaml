@@ -140,4 +140,5 @@ action:
     value_template: >
       {{ (alarm_panel_entity != none) }}
   - entity_id: !input 'alarm_panel_entity'
-    service: {{ alarm_control_panel.alarm_trigger }}
+    service: >
+      { alarm_control_panel.alarm_trigger }
