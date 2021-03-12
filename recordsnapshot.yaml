@@ -143,3 +143,8 @@ action:
     data:
       image: "{{ snapshot_file_path }}"
       clickAction: "{{ recording_file_path }}"
+  - condition: template
+    value_template: >
+      {{ (alarm_panel_entity != none) }}
+  - entity_id: !input 'alarm_panel_entity'
+    service: {{ alarm_control_panel.alarm_trigger }}
