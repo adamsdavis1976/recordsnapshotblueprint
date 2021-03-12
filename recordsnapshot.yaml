@@ -102,12 +102,10 @@ trigger:
   entity_id: !input 'binary_sensor'
   from: 'off'
   to: 'on'
-  
 condition:
   - condition: template
     value_template: >
       {{ (alarm_panel_entity == none) or (states[alarm_panel_entity].state == 'armed_away') }}
-      
 action: 
   - service: camera.record
     entity_id: !input 'camera'
@@ -140,5 +138,4 @@ action:
     value_template: >
       {{ (alarm_panel_entity != none) }}
   - entity_id: !input 'alarm_panel_entity'
-    service: >
-      { alarm_control_panel.alarm_trigger }
+    service: alarm_control_panel.alarm_trigger 
