@@ -62,6 +62,28 @@ blueprint:
       description: 'Default: "{{ binary_sensor_name }} detected movement!"'
       default: "{{ binary_sensor_name }} detected movement!"
 
+    clickAction:
+      name: ClickAction URI (Optional)
+      description: An URI to open when you click on the notification, can be an external URI (https://www.google.com) or an internal URI to a lovelace dashboard or view (/lovelace/cctv).
+      default: "{{ recording_file_path }}"
+
+    group_name:
+      name: Name of the group
+      description: To group notifications together for 1 automation. For instance if you want to have multiple automations but seperate them use unique names per automation.
+      default: "alarm_motion"
+
+    channel_name:
+      name: Name of the channel 
+      description: Different channels can have different notifications settings, such as sound etc.
+      default: "alarm_motion"
+
+    is_critical:
+      name: Should the notification be critical (iOS) or High Priority (Android)?
+      description: Toggle off it you don't want critical or high priority notifications.
+      selector:
+        boolean:
+      default: true
+
     additional_actions:
       name: 'Additional Actions'
       description: >-
@@ -95,7 +117,13 @@ variables:
   notification_message: !input notification_message
 
   alarm_panel_entity: !input alarm_panel_entity
- 
+
+  blocker_entity: !input blocker_entity
+  clickAction: !input clickAction
+  is_critical: !input is_critical
+  channel_name: !input channel_name
+  group_name: !input group_name
+
 trigger:
   platform: state
   entity_id: !input 'binary_sensor'
@@ -130,9 +158,30 @@ action:
     type: notify
     title: "{{ notification_title }}"
     message: "{{ notification_message }}"
-    data:
-      image: "{{ snapshot_file_path }}"
-      clickAction: "{{ recording_file_path }}"
+    data: >
+      {% if is_critical %}
+        {% if overwrite_similar %}
+          {% set platform_data = { "tag": "%s", "channel": "%s", "group": "%s", "ttl": 0, "priority": "high", "clickAction": "%s", "image": "%s"} | format(group_name, channel_name, group_name, clickAction, snapshot_file_path) %}
+        {% else %}
+          {% set platform_data = { "channel": "%s", "ttl": 0, "priority": "high", "clickAction": "%s", "image": "%s"} | format(channel_name, clickAction, snapshot_file_path) %}
+        {% endif %}
+      {% else %}
+        {% if overwrite_similar %}
+          {% set platform_data = { "tag": "%s", "channel": "%s", "group": "%s", "clickAction": "%s", "image": "%s"} | format(group_name, channel_name, group_name, clickAction, snapshot_file_path) %}
+        {% else %}
+          {% set platform_data = { "channel": "%s", "clickAction": "%s", "image": "%s"} | format(channel_name, clickAction, snapshot_file_path) %}
+        {% endif %}
+      {% endif %}
+      {{ platform_data }}
+
+
+#      image: "{{ snapshot_file_path }}"
+#      clickAction: "{{ recording_file_path }}"
+
+
+
+
+
   - condition: template
     value_template: >
       {{ (alarm_panel_entity != none) }}
