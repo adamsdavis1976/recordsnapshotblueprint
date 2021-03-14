@@ -43,8 +43,8 @@ condition:
     - condition: template
       value_template: '{{ states(entity_1) != states(entity_2) }}'
     - condition: time
-      after: '{{ time_after }}'
-      before: '{{ time_before }}'
+      after: !input 'time_after'
+      before: !input 'time_before'
 action:
 - service: homeassistant.turn_{{ trigger.to_state.state }}
   data:
