@@ -9,7 +9,6 @@ blueprint:
       description: The sensor wich triggers the snapshot creation
       selector:
         entity:
-          device_class: door
     camera:
       name: Camera
       description: The camera which creates the snapshot
