@@ -10,6 +10,7 @@ blueprint:
       selector:
         entity:
           domain: binary_sensor
+          domain: input_boolean
     camera:
       name: Camera
       description: The camera which creates the snapshot
