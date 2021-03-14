@@ -9,9 +9,7 @@ blueprint:
       description: The sensor wich triggers the snapshot creation
       selector:
         entity:
-          domain: binary_sensor
-        entity:
-          domain: input_boolean
+          device_class: door
     camera:
       name: Camera
       description: The camera which creates the snapshot
