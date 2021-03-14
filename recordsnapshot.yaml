@@ -118,7 +118,6 @@ variables:
 
   alarm_panel_entity: !input alarm_panel_entity
 
-  blocker_entity: !input blocker_entity
   clickAction: !input clickAction
   is_critical: !input is_critical
   channel_name: !input channel_name
