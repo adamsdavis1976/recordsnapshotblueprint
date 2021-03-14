@@ -10,6 +10,7 @@ blueprint:
       selector:
         entity:
           domain: binary_sensor
+        entity:
           domain: input_boolean
     camera:
       name: Camera
