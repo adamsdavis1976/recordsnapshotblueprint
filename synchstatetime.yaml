@@ -1,0 +1,50 @@
+blueprint:
+  name: Synchronize Second entity with first entity at certain times 
+  description: Synchronize the on/off state of 2 entities
+  domain: automation
+  input:
+    entity_1:
+      name: First entity
+      selector:
+        entity: {}
+    entity_2:
+      name: Second entity
+      selector:
+        entity: {}
+    time_before:
+      name: State will be synched before this time before
+      selector:
+        time:
+    time_after:
+      name: State will be synched after this time before
+      selector:
+        time:
+
+#  source_url: 
+mode: restart
+max_exceeded: silent
+variables:
+  entity_1: !input 'entity_1'
+  entity_2: !input 'entity_2'
+  time_before: !input 'time_before'
+  time_after: !input 'time_after'
+
+trigger:
+- platform: state
+  entity_id: !input 'entity_1'
+
+condition: 
+- condition: or
+  - condition: template
+    value_template: '{{ states(entity_1) != states(entity_2) and states(entity_1) == "off" }}'
+  - condition: and
+    conditions:
+    - condition: template
+      value_template: '{{ states(entity_1) != states(entity_2) }}'
+    - condition: time
+      after: {{ time_after }}
+      before: {{ time_before }}
+action:
+- service: homeassistant.turn_{{ trigger.to_state.state }}
+  data:
+    entity_id: '{% if trigger.from_state.entity_id == entity_1 %} {{ entity_2 }} {% else %} {{ entity_1 }} {% endif %}'
